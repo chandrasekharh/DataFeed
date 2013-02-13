@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  Log4j Configuration                                                  -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!--
+   | For more configuration infromation and examples see the Jakarta Log4j
+   | owebsite: http://jakarta.apache.org/log4j
+ -->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" 
+	debug="true">
+
+   <!-- ================================= -->
+   <!-- Preserve messages in a local file -->
+   <!-- ================================= -->
+
+   <!-- A size based file rolling appender -->
+   <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
+     <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+     <param name="File" value="/ctis/runtime/logs/deviceProfileServer.log"/>
+     <param name="Append" value="false"/>
+     <param name="ImmediateFlush" value="true"/>
+   	 <param name="MaxFileSize" value="4MB"/>
+   	 <param name="MaxBackupIndex" value="9"/>
+   	 	<!-- Buffering: 
+   		Always use power of 2.  To go smaller would be 4096 
+   		-->
+   	<param name="BufferedIO" value="false"/>
+   	<param name="BufferSize" value="8192"/>
+
+     <layout class="org.apache.log4j.PatternLayout">
+       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+     </layout>
+   </appender>
+   
+
+   <!-- ============================== -->
+   <!-- Append messages to the console -->
+   <!-- ============================== -->
+
+   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+      <param name="Target" value="System.out"/>
+      <param name="Threshold" value="DEBUG"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+      </layout>
+   </appender>
+
+   <!--================================================-->
+   <!-- CTIS application appender and loggers	       -->
+   <!--================================================-->
+   <logger name="cdot.ctis">
+         <level value="DEBUG" />
+   </logger>
+   
+    
+   
+   <!-- ================================== -->
+   <!-- Spring Framework Logging						 
+   	======================================-->
+   <logger name="org.springframework" >
+       <level value="TRACE" />
+   </logger>
+   
+   
+   
+   <!-- Limit the org.apache logger to INFO as its DEBUG is verbose -->
+   <logger name="org.apache">
+      <level value="DEBUG" />
+   </logger>
+   
+   
+
+   <!-- Setting to DEBUG will log 1000s of devices in the wurfl.zip's XML file! -->
+   <logger name="net.sourceforge.wurfl.core.resource.WURFLConsistencyVerifier">
+      <level value="INFO" />
+   </logger>
+   
+   <!-- ======================= -->
+   <!-- Setup the Root category -->
+   <!-- ======================= -->
+
+   <root>
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE"/>
+   </root>
+
+
+</log4j:configuration>

@@ -1,0 +1,31 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jaxws="http://cxf.apache.org/jaxws"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+
+    <!-- ========================================================== -->
+    <!--              Apache CXF Web Service Registrations      -->
+    <!-- ========================================================== -->
+    
+    <bean id="dataFeederBean" class="cdot.ctis.tools.external.DataFeeder">
+        <property name="paymentXMLStorageLocation" value="C:/apache-tomcat-7.0.11/webapps/external/xmls/payment"/>       
+        <property name="sensorXMLStorageLocation" value="C:/apache-tomcat-7.0.11/webapps/external/xmls/sensor"/>       
+        <property name="authInfo" value="datafeeduser$C0lorado1;admin$password@1"/>       
+        <property name="fileManager" ref="fileManager"/>
+    </bean>
+
+    <bean id="fileManager" class="cdot.ctis.tools.external.file.FileManager">
+        <property name="csvStorageLocation" value="C:/apache-tomcat-7.0.11/webapps/external/csv"/>       
+    </bean>
+
+    <jaxws:endpoint id="dataFeeder" implementor="#dataFeederBean" address="/DataFeeder" />  
+    
+    <!-- ========================================================== -->
+    <!--               Data Feeder Bean Registrations       -->
+    <!-- ========================================================== -->
+</beans>

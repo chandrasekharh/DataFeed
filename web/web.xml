@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+
+<!-- 
+	If NOT profiling, remove: WEB-INF/WebProfiler.xml and WEB-INF/ServicesProfiler.xml
+	from their respective entries in the contextConfigLocation setup
+ -->
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>WURFL Device Profile Server</display-name>
+	<description>WURFL Device Profile Server serves device profiles to callers via Web Service API</description>
+
+	
+	
+	<!--
+		Location of the Log4J config file, for initialization and refresh checks.
+		Applied by Log4jConfigListener.
+	-->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/log4j.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jRefreshInterval</param-name>
+		<!--  milliseconds: 5000 is for development -->
+		<param-value>5000</param-value>
+	</context-param>
+	<context-param>
+		<param-name>cleanUpListenerDebugEnabled</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			WEB-INF/applicationContext.xml
+		</param-value>
+	</context-param>
+	
+	
+	
+	
+	<!--
+		- Configures Log4J for this web app and manages the
+		- file-locking, resource allocations during hot deploys.
+		- Must be registered before ContextLoaderListener
+		
+		- Uses context-param: log4jConfigLocation (where to find log4j.xml)
+		- Uses context-param: log4jRefreshInterval ( > 0 if you want auto-refresh)
+	-->
+	<listener>
+		<listener-class>
+			org.springframework.web.util.Log4jConfigListener
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<listener>
+		<listener-class>
+			org.springframework.web.util.IntrospectorCleanupListener
+		</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>CXFServlet</servlet-name>
+		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>CXFServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+	
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
