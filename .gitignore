@@ -15,6 +15,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+*/CVS/*
 
 # External tool builders
 .externalToolBuilders/
